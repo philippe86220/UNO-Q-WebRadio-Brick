@@ -42,7 +42,7 @@ The project also explores the behavior of custom brick services and containerize
 
 ## Overview
 
-This project explores the capabilities and current limitations of **custom bricks in Arduino App Lab 0.7.0** on the **UNO Q platform**.
+This project explores the capabilities of **custom bricks in Arduino App Lab 0.7.0** on the **UNO Q platform**.
 
 The goal is to:
 
