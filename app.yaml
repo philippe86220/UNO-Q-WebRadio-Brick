@@ -1,7 +1,7 @@
-name: UNO Q – WebRadio Custom Brick Exploration
+name: UNO-Q-Custom-Brick-Exploration-WebUI
 description: ""
 ports: []
 bricks:
 - webradio: {}
 - arduino:web_ui: {}
-icon: 📻🧱
+icon: 📻
