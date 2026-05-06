@@ -42,12 +42,23 @@ radio.play("rtl")
 ### stop()
 
 Stop playback.
+Example:
+
+```python
+radio.stop()
+```
+
 
 ---
 
 ### set_volume(value)
 
 Set volume from 0 to 100.
+Example:
+
+```python
+radio.set_volume(50)
+```
 
 ---
 
@@ -81,6 +92,7 @@ Default host:
 ```
 http://172.17.0.1:9000
 ```
+
 ### Notes
 This brick runs inside the App Lab container. 
 Direct ALSA access is not available inside App Lab service containers,
