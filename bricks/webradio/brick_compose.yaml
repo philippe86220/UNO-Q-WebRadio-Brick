@@ -1,1 +1,4 @@
-
+services:
+  player:
+    image: debian:bookworm-slim
+    command: bash -c "ls -l /dev/snd || true; sleep infinity"
