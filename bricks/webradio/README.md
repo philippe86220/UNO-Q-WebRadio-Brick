@@ -87,7 +87,7 @@ providing HTTP endpoints such as:
 /stop
 /volume?value=50
 ```
-Default host:
+### Default host:
 
 ```
 http://172.17.0.1:9000
