@@ -1,1 +1,7 @@
-
+name: Brique webradio
+description: ""
+ports: []
+bricks:
+- webradio: {}
+- arduino:web_ui: {}
+icon: 😀
