@@ -270,3 +270,7 @@ This project was developed through iterative experimentation and architectural e
 ## License
 
 MIT License
+
+---
+
+This project benefited from technical discussions and architectural exploration with ChatGPT (OpenAI).
