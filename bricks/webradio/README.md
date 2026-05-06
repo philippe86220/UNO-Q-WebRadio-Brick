@@ -95,5 +95,6 @@ http://172.17.0.1:9000
 
 ### Notes
 This brick runs inside the App Lab container. 
-Direct ALSA access is not available inside App Lab service containers,
+
+Direct ALSA access is not available inside App Lab service containers,  
 therefore audio playback is delegated to a Linux host-side service.
