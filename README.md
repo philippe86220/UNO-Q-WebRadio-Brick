@@ -233,9 +233,11 @@ assets/
 
 bricks/
     webradio/
+        README.md
         __init__.py
         brick_config.yaml
         brick_compose.yaml
+ 
 python/
     main.py
 
@@ -250,7 +252,11 @@ scripts/
     stop_radio.sh
 
 services/
-    radio_service.service 
+    radio_service.service
+
+LICENSE
+README.md
+app.yaml
 ```
 
 ---
