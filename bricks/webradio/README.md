@@ -56,7 +56,7 @@ Set volume from 0 to 100.
 Return current internal state.
 Example returned dictionary:
 
-```
+```python
 {
     "ok": True,
     "station": "info",
@@ -64,3 +64,24 @@ Example returned dictionary:
     "running": True
 }
 ```
+
+### Backend Requirement
+
+This brick requires a Linux host-side service
+providing HTTP endpoints such as:
+
+```
+/info
+/rtl
+/stop
+/volume?value=50
+```
+Default host:
+
+```
+http://172.17.0.1:9000
+```
+### Notes
+This brick runs inside the App Lab container. 
+Direct ALSA access is not available inside App Lab service containers,
+therefore audio playback is delegated to a Linux host-side service.
