@@ -56,7 +56,7 @@ Set volume from 0 to 100.
 Return current internal state.
 Example returned dictionary:
 
-```python
+```
 {
     "ok": True,
     "station": "info",
