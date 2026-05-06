@@ -1,3 +1,11 @@
+![Arduino App Lab](https://img.shields.io/badge/Arduino%20App%20Lab-0.7.0-blue)
+![Platform](https://img.shields.io/badge/macOS-26.3.1-lightgrey)
+![Target](https://img.shields.io/badge/Board-UNO%20Q-green)
+![Python](https://img.shields.io/badge/Python-3.x-yellow)
+![Audio](https://img.shields.io/badge/Audio-ALSA%20%2F%20mpg123-red)
+
+
+
 # UNO-Q-Custom-Brick-Exploration-WebUI
 
 ## Introduction
