@@ -181,7 +181,7 @@ Custom bricks in App Lab:
 * WebUI integration
 * containerized services (non-hardware)
 
-❌ do not currently allow:
+- do not currently allow:
 
 * direct ALSA access
 * USB audio output
