@@ -231,18 +231,26 @@ Potential enhancements for App Lab:
 assets/
     index.html
 
-python/
-    main.py
-
 bricks/
     webradio/
         __init__.py
         brick_config.yaml
         brick_compose.yaml
+python/
+    main.py
 
-host/
+scripts/
+    play_INFO.sh
+    play_INTER.sh
+    play_mRadioTop50.sh
+    play_MUSIQUE.sh
+    play_NOSTALGIE.sh
+    play_RTL.sh
     radio_service.py
-    scripts/
+    stop_radio.sh
+
+services/
+    radio_service.service 
 ```
 
 ---
