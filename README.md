@@ -1,5 +1,37 @@
 # UNO-Q-Custom-Brick-Exploration-WebUI
 
+## Introduction
+
+This project is an evolution of the following project:
+
+👉 https://github.com/philippe86220/UNO-Q--WebRadio
+
+The previous version was based on a graphical interface implemented with the standard WebUI HTML brick available in Arduino App Lab.
+
+This new version keeps the same overall Web Radio concept while introducing a custom local brick named `WebRadio`.
+
+The goal is to explore how custom bricks can be used to:
+
+* encapsulate application logic,
+* simplify the Python application structure,
+* expose a cleaner API,
+* and separate the user interface from the backend implementation.
+
+Instead of directly performing HTTP requests inside `main.py`,
+all radio-related operations are now handled by the custom brick:
+
+```python id="p77gx8"
+radio.play("info")
+radio.set_volume(50)
+radio.stop()
+```
+
+This approach results in a cleaner and more modular architecture while remaining fully compatible with the current App Lab execution model.
+
+The project also explores the behavior of custom brick services and containerized components in App Lab 0.7.0.
+
+---
+
 ## Overview
 
 This project explores the capabilities and current limitations of **custom bricks in Arduino App Lab 0.7.0** on the **UNO Q platform**.
