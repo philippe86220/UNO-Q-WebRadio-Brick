@@ -310,6 +310,32 @@ Once initialization is complete, radio playback becomes immediately available.
 
 ---
 
+## Radio Stream Availability
+
+The radio streams used in this project are provided as examples.
+
+Depending on the user location, network provider, or radio station policy, some streams may:
+
+- be unavailable outside a specific country
+- be geo-restricted
+- change URL over time
+- temporarily stop responding
+- require replacement by another stream URL
+
+If a station does not play, the application itself may still be working correctly.  
+In that case, test the backend with another stream URL or replace the corresponding entry in `RADIOS` inside `radio_service.py`.
+
+Example:
+
+```python
+RADIOS = {
+    "info": "http://icecast.radiofrance.fr/franceinfo-lofi.mp3",
+    "rtl": "https://icecast.rtl.fr/rtl-1-44-128",
+}
+```
+
+---
+
 ## Credits
 
 This project was developed through experimentation and architectural exploration of the UNO Q platform.
