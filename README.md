@@ -287,6 +287,12 @@ app.yaml
 
 ---
 
+## Note: 
+
+the first startup may take some time because Debian packages are installed dynamically inside the container before the radio service starts.
+
+---
+
 ## Credits
 
 This project was developed through experimentation and architectural exploration of the UNO Q platform.
