@@ -2,14 +2,44 @@
 
 ## Overview
 
-This custom App Lab brick provides a simple API
-to control a host-side Linux web radio service.
+`WebRadio` is a custom App Lab brick for UNO Q.
+
+It provides a simple Python API to control a containerized Linux audio service.
 
 The brick encapsulates:
-- station selection
+
+- radio playback
 - volume control
-- status handling
+- playback status
 - HTTP communication
+- ALSA audio output
+
+---
+
+## Architecture
+
+```text
+Python App
+    ↓
+WebRadio Brick
+    ↓
+radio_service.py
+    ↓
+mpg123
+    ↓
+ALSA (/dev/snd)
+```
+
+---
+
+## Features
+
+The brick provides:
+
+- `play(station)`
+- `stop()`
+- `set_volume(value)`
+- `status()`
 
 ---
 
@@ -24,6 +54,7 @@ radio.play("info")
 radio.set_volume(50)
 radio.stop()
 ```
+
 ---
 
 ## Methods
@@ -31,6 +62,7 @@ radio.stop()
 ### play(station)
 
 Start a radio stream.
+
 Example:
 
 ```python
@@ -42,22 +74,23 @@ radio.play("rtl")
 ### stop()
 
 Stop playback.
+
 Example:
 
 ```python
 radio.stop()
 ```
 
-
 ---
 
 ### set_volume(value)
 
-Set volume from 0 to 100.
+Set playback volume from 0 to 100.
+
 Example:
 
 ```python
-radio.set_volume(50)
+radio.set_volume(75)
 ```
 
 ---
@@ -65,6 +98,7 @@ radio.set_volume(50)
 ### status()
 
 Return current internal state.
+
 Example returned dictionary:
 
 ```python
@@ -76,25 +110,88 @@ Example returned dictionary:
 }
 ```
 
-### Backend Requirement
+---
 
-This brick requires a Linux host-side service
-providing HTTP endpoints such as:
+## Internal Audio Service
 
+The brick includes a containerized audio backend based on:
+
+- Python HTTP server
+- mpg123
+- ALSA
+- USB audio output
+
+The backend service is launched automatically using:
+
+```text
+brick_compose.yaml
 ```
+
+---
+
+## Audio Device Access
+
+The container accesses ALSA devices using:
+
+```yaml
+devices:
+  - /dev/snd
+```
+
+This allows direct audio playback from inside the brick container.
+
+---
+
+## Internal HTTP Endpoints
+
+The internal service exposes endpoints such as:
+
+```text
 /info
 /rtl
+/inter
+/musique
+/nostalgie
+/mradio
 /stop
+/status
 /volume?value=50
 ```
-### Default host:
 
+---
+
+## Notes
+
+The brick communicates internally with the audio service using HTTP requests.
+
+Default internal host:
+
+```text
+http://player:9000
 ```
-http://172.17.0.1:9000
+
+---
+
+## Example
+
+```python
+result = radio.play("nostalgie")
+
+print(result)
 ```
 
-### Notes
-This brick runs inside the App Lab container. 
+Possible returned dictionary:
 
-Direct ALSA access is not available inside App Lab service containers,  
-therefore audio playback is delegated to a Linux host-side service.
+```python
+{
+    "ok": True,
+    "station": "nostalgie",
+    "running": True
+}
+```
+
+---
+
+## License
+
+MIT License
