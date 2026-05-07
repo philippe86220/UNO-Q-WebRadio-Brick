@@ -287,19 +287,6 @@ app.yaml
 
 ---
 
-## Future Improvements
-
-Potential future enhancements:
-
-- OLED display support
-- Modulino button integration
-- persistent station memory
-- automatic startup playback
-- Bluetooth audio support
-- official App Lab audio APIs
-
----
-
 ## Credits
 
 This project was developed through experimentation and architectural exploration of the UNO Q platform.
