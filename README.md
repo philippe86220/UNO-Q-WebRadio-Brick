@@ -158,7 +158,7 @@ services:
       sh -c "
       apt update &&
       apt install -y python3 mpg123 alsa-utils procps curl ca-certificates &&
-      python3 /webradio/radio_service.py
+      exec python3 /webradio/radio_service.py
       "
 ```
 
