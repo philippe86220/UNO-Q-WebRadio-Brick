@@ -6,88 +6,116 @@
 
 
 
-# UNO-Q-Custom-Brick-Exploration-WebUI
+![Arduino App Lab](https://img.shields.io/badge/Arduino%20App%20Lab-0.7.0-blue)
+![Platform](https://img.shields.io/badge/macOS-26.3.1-lightgrey)
+![Target](https://img.shields.io/badge/Board-UNO%20Q-green)
+![Python](https://img.shields.io/badge/Python-3.x-yellow)
+![Audio](https://img.shields.io/badge/Audio-ALSA%20%2F%20mpg123-red)
+![Container](https://img.shields.io/badge/Container-Docker-orange)
+
+# UNO-Q-WebRadio-Brick
 
 ## Introduction
 
-This project is an evolution of the following project:
+This project explores advanced custom brick capabilities in Arduino App Lab 0.7.0 on the UNO Q platform.
 
-👉 https://github.com/philippe86220/UNO-Q--WebRadio
+It demonstrates how a custom brick can encapsulate:
 
-The previous version was based on a graphical interface implemented with the standard WebUI HTML brick available in Arduino App Lab.
+- application logic
+- a containerized Linux service
+- HTTP communication
+- ALSA audio playback
+- MP3 streaming
+- and WebUI integration
 
-This new version keeps the same overall Web Radio concept while introducing a custom local brick named `WebRadio`.
+The project implements a fully functional Web Radio architecture using:
 
-The goal is to explore how custom bricks can be used to:
-
-* encapsulate application logic,
-* simplify the Python application structure,
-* expose a cleaner API,
-* and separate the user interface from the backend implementation.
-
-Instead of directly performing HTTP requests inside `main.py`,
-all radio-related operations are now handled by the custom brick:
-
-```python id="p77gx8"
-radio.play("info")
-radio.set_volume(50)
-radio.stop()
-```
-
-This approach results in a cleaner and more modular architecture while remaining fully compatible with the current App Lab execution model.
-
-The project also explores the behavior of custom brick services and containerized components in App Lab 0.7.0.
+- App Lab Python
+- a custom local brick
+- a Docker container
+- mpg123
+- ALSA
+- and a USB audio device
 
 ---
 
-## Overview
+## Main Goal
 
-This project explores the capabilities of **custom bricks in Arduino App Lab 0.7.0** on the **UNO Q platform**.
+The purpose of this project is to explore how custom bricks can be used to build modular and reusable application architectures on UNO Q.
 
-The goal is to:
+The project also demonstrates that Linux audio devices can be exposed inside custom brick containers using:
 
-* build a clean application architecture using a custom brick,
-* integrate a WebUI interface,
-* test containerized services via `brick_compose.yaml`,
-* and evaluate access to low-level audio (ALSA / USB sound).
+```yaml
+devices:
+  - /dev/snd
+```
+
+This allows direct ALSA audio playback from inside the brick service container.
 
 ---
 
-## Architecture
+## Global Architecture
 
-The final working architecture is:
+Final architecture:
 
+```text
+WebUI HTML
+    ↓
+main.py
+    ↓
+WebRadio Brick API
+    ↓
+radio_service.py
+    ↓
+mpg123
+    ↓
+ALSA (/dev/snd)
+    ↓
+USB Audio Device
 ```
-WebUI (HTML)
-    ↓
-App Lab (Python)
-    ↓
-Custom Brick (WebRadio)
-    ↓
-Linux host service (systemd)
-    ↓
-mpg123 + ALSA + USB audio
-```
-
-### Key idea
-
-* **App Lab container** handles UI and logic
-* **Linux host** handles hardware access (audio)
 
 ---
 
-## Custom Brick: WebRadio
+## Project Overview
 
-A local custom brick is implemented to encapsulate all radio logic.
+The application is composed of:
 
-### Features
+### WebUI
 
-* `play(station)`
-* `stop()`
-* `set_volume(value)`
-* `status()`
+Provides:
 
-### Example usage
+- radio selection buttons
+- volume control
+- playback status
+
+---
+
+### main.py
+
+Exposes HTTP APIs to the WebUI using:
+
+```python
+ui.expose_api()
+```
+
+Example:
+
+```python
+ui.expose_api("GET", "/api/info", api_info)
+```
+
+---
+
+### Custom Brick
+
+The `WebRadio` brick encapsulates:
+
+- station playback
+- volume management
+- status handling
+- communication with the container service
+
+Example:
 
 ```python
 from webradio import WebRadio
@@ -99,19 +127,106 @@ radio.set_volume(50)
 radio.stop()
 ```
 
-This replaces direct HTTP calls with a clean API.
+---
+
+### Containerized Audio Service
+
+The brick includes its own container service defined in:
+
+```text
+brick_compose.yaml
+```
+
+The service:
+
+- installs mpg123
+- installs ALSA utilities
+- exposes `/dev/snd`
+- launches `radio_service.py`
 
 ---
 
-## WebUI Interface
+## brick_compose.yaml
 
-A simple HTML interface is used:
+```yaml
+services:
+  player:
+    image: debian:bookworm-slim
+    user: root
 
-* station selection buttons
-* volume slider
-* status display
+    devices:
+      - /dev/snd
 
-Example API call:
+    volumes:
+      - .:/webradio
+
+    command: >
+      sh -c "
+      apt update &&
+      apt install -y python3 mpg123 alsa-utils procps curl ca-certificates &&
+      python3 /webradio/radio_service.py
+      "
+```
+
+---
+
+## Audio Backend
+
+Audio playback is performed using:
+
+```bash
+mpg123
+```
+
+with ALSA output:
+
+```bash
+-o alsa
+-a hw:0,0
+```
+
+---
+
+## Supported Radio Stations
+
+Current examples:
+
+- France Info
+- RTL
+- France Inter
+- France Musique
+- Nostalgie
+- M Radio
+
+Stations are defined inside:
+
+```python
+RADIOS = {
+    ...
+}
+```
+
+---
+
+## HTTP API
+
+The internal container service exposes endpoints such as:
+
+```text
+/info
+/rtl
+/inter
+/musique
+/nostalgie
+/mradio
+/stop
+/status
+/volume?value=50
+```
+
+---
+
+## Example WebUI Call
 
 ```javascript
 fetch("/api/info")
@@ -119,115 +234,46 @@ fetch("/api/info")
 
 ---
 
-## Backend: Linux Audio Service
+## What This Project Demonstrates
 
-Audio playback is handled by a **host-side service**:
+This repository demonstrates:
 
-* Python HTTP server (`radio_service.py`)
-* Shell scripts using `mpg123`
-* ALSA output to USB sound card
+✔ custom App Lab bricks
 
-Example endpoint:
+✔ containerized services
 
-```
-http://172.17.0.1:9000/info
-```
+✔ ALSA access from containers
 
----
+✔ MP3 audio streaming
 
-## Containerization Test
+✔ reusable Python APIs
 
-A key part of this project was testing whether audio playback could be fully containerized using `brick_compose.yaml`.
+✔ modular architecture
 
-### Test configuration
+✔ WebUI integration
 
-```yaml
-services:
-  player:
-    image: debian:bookworm-slim
-    command: sh -c "ls -l /dev/snd || true; sleep infinity"
-```
-
-### Test command
-
-```bash
-docker exec -it copy-of-brique-player-1 ls -l /dev/snd
-```
+✔ hardware access through `brick_compose.yaml`
 
 ---
 
-## Result
+## Why This Matters
 
-```
-ls: cannot access '/dev/snd': No such file or directory
-```
+This project highlights an important capability of UNO Q and App Lab:
 
-### Interpretation
+Custom brick containers can access Linux hardware devices when explicitly exposed through Docker compose configuration.
 
-* The container runs correctly
-* BUT audio devices are not exposed inside the container
+This opens the door to:
 
----
-
-## Conclusion
-
-Custom bricks in App Lab:
-
-✔ allow:
-
-* clean architecture
-* reusable logic
-* API abstraction
-* WebUI integration
-* containerized services (non-hardware)
-
-👉 do not currently allow:
-
-* direct ALSA access
-* USB audio output
-* low-level hardware control from containers
+- audio applications
+- multimedia projects
+- hardware-oriented Linux services
+- advanced hybrid MPU applications
 
 ---
 
-## Final Design Choice
+## Repository Structure
 
-Because of this limitation, audio playback is handled outside App Lab:
-
-```
-App Lab → HTTP → Linux host → ALSA → USB audio
-```
-
-This approach is:
-
-* robust
-* reliable
-* compatible with current platform constraints
-
----
-
-## Why this matters
-
-This project demonstrates:
-
-* how to properly structure an App Lab application
-* how to use custom bricks effectively
-* and where the current platform boundaries are
-
----
-
-## Future Improvements
-
-Potential enhancements for App Lab:
-
-* expose `/dev/snd` to containers
-* provide official audio output API
-* support USB audio devices inside bricks
-
----
-
-## Repository Content
-
-```
+```text
 assets/
     index.html
 
@@ -237,22 +283,10 @@ bricks/
         __init__.py
         brick_config.yaml
         brick_compose.yaml
- 
+        radio_service.py
+
 python/
     main.py
-
-scripts/
-    play_INFO.sh
-    play_INTER.sh
-    play_mRadioTop50.sh
-    play_MUSIQUE.sh
-    play_NOSTALGIE.sh
-    play_RTL.sh
-    radio_service.py
-    stop_radio.sh
-
-services/
-    radio_service.service
 
 LICENSE
 README.md
@@ -261,16 +295,27 @@ app.yaml
 
 ---
 
+## Future Improvements
+
+Potential future enhancements:
+
+- OLED display support
+- Modulino button integration
+- persistent station memory
+- automatic startup playback
+- Bluetooth audio support
+- official App Lab audio APIs
+
+---
+
 ## Credits
 
-This project was developed through iterative experimentation and architectural exploration of the UNO Q platform.
+This project was developed through experimentation and architectural exploration of the UNO Q platform.
+
+It also benefited from technical discussions and architectural exploration with ChatGPT (OpenAI).
 
 ---
 
 ## License
 
 MIT License
-
----
-
-This project benefited from technical discussions and architectural exploration with ChatGPT (OpenAI).
