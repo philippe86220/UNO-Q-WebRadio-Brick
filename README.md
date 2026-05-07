@@ -298,7 +298,13 @@ On first startup, the container dynamically installs required Debian packages su
 - alsa-utils
 - curl
 
-Because of this initialization step, the radio service may take approximately 30 to 60 seconds before becoming operational on a fresh installation.
+Because of this initialization step, the radio backend may take approximately 30 to 60 seconds before becoming operational on a fresh installation.
+
+During this initialization phase:
+
+- the WebUI may already be accessible
+- but radio playback requests can temporarily return an error message
+- until the container service finishes initialization
 
 Once initialization is complete, radio playback becomes immediately available.
 
