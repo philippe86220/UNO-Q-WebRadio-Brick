@@ -5,7 +5,7 @@ from urllib.error import URLError, HTTPError
 
 
 class WebRadio:
-    def __init__(self, host="http://172.17.0.1:9000"):
+    def __init__(self, host="http://player:9000"): 
         self.host = host
         self.station = "none"
         self.volume = 50
