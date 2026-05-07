@@ -13,16 +13,18 @@ This project explores advanced custom brick capabilities in Arduino App Lab 0.7.
 
 It demonstrates how a custom brick can encapsulate:
 
-- application logic
-- a containerized Linux service
-- HTTP communication
+- radio application logic
+- a containerized Linux audio service
+- internal HTTP communication
 - ALSA audio playback
-- MP3 streaming
-- and WebUI integration
+- MP3 streaming management
+
+while remaining easily usable from a WebUI-based App Lab application.
 
 The project implements a fully functional Web Radio architecture using:
 
 - App Lab Python
+- a WebUI frontend
 - a custom local brick
 - a Docker container
 - mpg123
