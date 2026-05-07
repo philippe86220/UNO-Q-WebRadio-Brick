@@ -2,14 +2,16 @@ services:
   player:
     image: debian:bookworm-slim
     user: root
+
     devices:
       - /dev/snd
+
     volumes:
       - .:/webradio
+
     command: >
       sh -c "
       apt update &&
       apt install -y python3 mpg123 alsa-utils procps curl ca-certificates &&
-      python3 /webradio/radio_service.py;
-      sleep infinity
+      exec python3 /webradio/radio_service.py
       "
