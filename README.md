@@ -289,9 +289,18 @@ app.yaml
 
 ---
 
-## Note: 
+## First Startup Behavior
 
-the first startup may take some time because Debian packages are installed dynamically inside the container before the radio service starts.
+On first startup, the container dynamically installs required Debian packages such as:
+
+- python3
+- mpg123
+- alsa-utils
+- curl
+
+Because of this initialization step, the radio service may take approximately 30 to 60 seconds before becoming operational on a fresh installation.
+
+Once initialization is complete, radio playback becomes immediately available.
 
 ---
 
